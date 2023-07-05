@@ -24,7 +24,7 @@ def view_folder_content(folder_path):
     return my_entries
 
 
-def create_ingestion_output_folder(folder_path):
+def create_output_folder(folder_path):
     if not os.path.exists(folder_path):
         os.mkdir(folder_path)
         print(f"Folder {folder_path} created successfully.")
@@ -52,7 +52,7 @@ def merge_multiple_dataframe():
     print("ingestedfiles.txt created successfully")
     dataframe = dataframe.drop_duplicates()
     dataframe = dataframe.reset_index(drop=True)
-    create_ingestion_output_folder(output_folder_path)
+    create_output_folder(output_folder_path)
     dataframe.to_csv(output_folder_path + "/" + "finaldata.csv")       
 
 
