@@ -53,10 +53,7 @@ def merge_multiple_dataframe():
     dataframe = dataframe.drop_duplicates()
     dataframe = dataframe.reset_index(drop=True)
     create_output_folder(output_folder_path)
-    dataframe.to_csv(output_folder_path + "/" + "finaldata.csv")       
-
-
-
+    dataframe.to_csv(output_folder_path + "/" + "finaldata.csv")   
 
 
 if __name__ == '__main__':
