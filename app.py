@@ -22,10 +22,16 @@ prediction_model_path = config["output_model_path"]
 
 
 # Prediction Endpoint
-@app.route("/prediction", methods=['POST', 'OPTIONS'])
-def predict(data_path):
+@app.route("/prediction", methods=['GET', 'POST', 'OPTIONS'])
+def predict():
     # call the prediction function you created in Step 3
-
+    if request.method == "GET":
+        data_path = request.args.get('datapath')
+    elif request.method == "POST":
+        data_path = request.form.get('datapath')
+    else:
+        return "Method not allowed", 405
+    print("THIS IS THE DATAPATH: ", data_path)
     predictions, _ = model_predictions(data_path)
     return str(predictions)
 
