@@ -37,7 +37,8 @@ def score_model():
     print(f1)
     with open("latestscore.txt", "w") as f:
         f.write(str(f1))
-    print("latestscore.txt created successfully")    
+    print("latestscore.txt created successfully")
+    return f1
 
 
 if __name__ == "__main__":

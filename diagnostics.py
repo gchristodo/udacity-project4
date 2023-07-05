@@ -18,20 +18,20 @@ output_folder_path = config['output_folder_path']
 
 
 # Function to get model predictions
-def model_predictions():
+def model_predictions(data_path):
     # read the deployed model and a test dataset, calculate predictions
     model_pkl_file = "trainedmodel.pkl"
-    with open(os.path.join(prod_deployment_path, model_pkl_file), "rb") as file:
-        deployed_model = pickle.load(file)
+    with open(os.path.join(prod_deployment_path, model_pkl_file), "rb") as f:
+        deployed_model = pickle.load(f)
 
-    test_data = pd.read_csv(test_data_path + "/" + "testdata.csv")
+    test_data = pd.read_csv(data_path)
     X = np.array(test_data[["lastmonth_activity",
                             "lastyear_activity",
                             "number_of_employees"]]).reshape(-1, 3)
     y = np.array(test_data["exited"])
     predictions = deployed_model.predict(X)
-    print("Predictions: ", predictions)    
-    return predictions
+    print("Predictions: ", predictions)
+    return predictions, y
 
 
 # Function to get summary statistics
@@ -64,9 +64,10 @@ def calculate_na_percentage():
     print("na_percentages: ", na_percentages)            
     return na_percentages   
 
+
 # Function to get timings
 def execution_time():
-    #calculate timing of training.py and ingestion.py
+    # calculate timing of training.py and ingestion.py
     scripts = ["ingestion.py", "training.py"]
     execution_times = []
     for script in scripts:
@@ -121,6 +122,7 @@ def outdated_packages_list():
     dependencies_df = pd.DataFrame(dependencies_dict)
     print(dependencies_df)
     return dependencies_df
+
 
 if __name__ == '__main__':
     model_predictions()

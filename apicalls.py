@@ -1,20 +1,24 @@
 import requests
+import subprocess
+import json
 
-#Specify a URL that resolves to your workspace
-URL = "http://127.0.0.1/"
+# Specify a URL that resolves to your workspace
+URL = "http://127.0.0.1"
+with open('config.json', 'r') as f:
+    config = json.load(f) 
+output_model_path = config['output_model_path']
 
+# Call each API endpoint and store the responses
+response1 = subprocess.run(['curl', URL + ':8000/scoring'], capture_output=True).stdout
+response2 = subprocess.run(['curl', URL + ':8000/summarystats'], capture_output=True).stdout
+response3 = subprocess.run(['curl', URL + ':8000/diagnostics'], capture_output=True).stdout
+#response4 = requests.get(URL + ':8000/prediction?datapath=testdata/testdata.csv').content
+#print(response4)
+# combine all API responses
+responses = str(response1) + "\n" + str(response2) + "\n" + str(response3)
 
-
-#Call each API endpoint and store the responses
-response1 = #put an API call here
-response2 = #put an API call here
-response3 = #put an API call here
-response4 = #put an API call here
-
-#combine all API responses
-responses = #combine reponses here
-
-#write the responses to your workspace
-
+# write the responses to your workspace
+with open(output_model_path + "/" + "apireturns.txt", "w") as f:
+    f.write(responses)
 
 
