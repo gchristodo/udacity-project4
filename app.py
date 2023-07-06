@@ -31,9 +31,8 @@ def predict():
         data_path = request.form.get('datapath')
     else:
         return "Method not allowed", 405
-    print("THIS IS THE DATAPATH: ", data_path)
     predictions, _ = model_predictions(data_path)
-    return str(predictions)
+    return str(predictions), 200
 
 
 # Scoring Endpoint
@@ -42,7 +41,7 @@ def stats_1():
     # check the score of the deployed model
 
     f1 = score_model()
-    return str(f1)
+    return str(f1), 200
 
 
 # Summary Statistics Endpoint
@@ -50,7 +49,7 @@ def stats_1():
 def stats_2():
     # check means, medians, and modes for each column
     summary_stats = dataframe_summary()
-    return str(summary_stats)
+    return str(summary_stats), 200
 
 
 # Diagnostics Endpoint
@@ -59,7 +58,7 @@ def stats_3():
     # check timing and percent NA values
 
     na_percentages = calculate_na_percentage()
-    return na_percentages
+    return na_percentages, 200
 
 
 if __name__ == "__main__":

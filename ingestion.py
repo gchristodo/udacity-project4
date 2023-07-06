@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 # Load config.json and get input and output paths
-with open('config.json','r') as f:
+with open('config.json', 'r') as f:
     config = json.load(f) 
 
 input_folder_path = config['input_folder_path']
