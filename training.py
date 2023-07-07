@@ -1,13 +1,15 @@
-from flask import Flask, session, jsonify, request
-import pandas as pd
-import numpy as np
+"""
+Script for training the model
+author: George Christodoulou
+Date: 07/07/23
+"""
+import json
 import pickle
 import os
-from sklearn import metrics
-from sklearn.model_selection import train_test_split
+import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from ingestion import create_output_folder
-import json
+
 
 # Load config.json and get path variables
 with open("config.json", "r") as f:
@@ -19,11 +21,10 @@ model_path = config["output_model_path"]
 
 # Function for training the model
 def train_model():
+    """A function that trains the model
+    """
     cwd = os.getcwd()
-    trainingdata = pd.read_csv(
-        cwd + "\\" +
-        dataset_csv_path +
-        "\\" + "finaldata.csv")
+    trainingdata = pd.read_csv(cwd + "\\" + dataset_csv_path + "\\" + "finaldata.csv")
     X = trainingdata.loc[
         :, ["lastmonth_activity", "lastyear_activity", "number_of_employees"]
     ].values.reshape(-1, 3)
@@ -48,7 +49,8 @@ def train_model():
 
     # fit the logistic regression to your data
     model = logit.fit(X, y)
-    # write the trained model to your workspace in a file called trainedmodel.pkl
+    # write the trained model to your workspace
+    # in a file called trainedmodel.pkl
     create_output_folder(model_path)
     file_path = cwd + "/" + model_path + "/" + "trainedmodel.pkl"
     with open(file_path, "wb") as f:

@@ -1,34 +1,34 @@
-
-from training import train_model
-from ingestion import (view_folder_content,
-                       merge_multiple_dataframe,
-                       extract_csv_from_path_list)
-import ingestion
-from scoring import score_model
-from deployment import store_model_into_pickle
-import diagnostics
-from reporting import model_report
+"""
+Script for running the fullprocess
+author: George Christodoulou
+Date: 07/07/23
+"""
 import json
 import sys
 import subprocess
+from ingestion import (
+    view_folder_content,
+    extract_csv_from_path_list,
+)
 
-##################Check and read new data
+
 # Check and read new data
-with open('config.json', 'r') as f:
+with open("config.json", "r") as f:
     config = json.load(f)
 
-ingested_data_path = config['output_folder_path']
-input_folder_path = config['input_folder_path']
-prod_deployment_path = config['prod_deployment_path']
+ingested_data_path = config["output_folder_path"]
+input_folder_path = config["input_folder_path"]
+prod_deployment_path = config["prod_deployment_path"]
 model_path = config["output_model_path"]
 # first, read ingestedfiles.txt
 
 previous_datasets = []
-with open(ingested_data_path + '/' + 'ingestedfiles.txt', 'r') as f:
+with open(ingested_data_path + "/" + "ingestedfiles.txt", "r") as f:
     for line in f:
         previous_datasets.append(line.strip())
 
-#second, determine whether the source data folder has files that aren't listed in ingestedfiles.txt
+# second, determine whether the source data folder has files
+# that aren't listed in ingestedfiles.txt
 source_folder_entries = view_folder_content(input_folder_path)
 current_datasets = extract_csv_from_path_list(source_folder_entries)
 
@@ -53,11 +53,13 @@ else:
 # check whether the score from the deployed model is different
 # from the score from the model that uses the newest ingested data
 
-with open(prod_deployment_path + '/' + 'latestscore.txt', 'r') as f:
+with open(prod_deployment_path + "/" + "latestscore.txt", "r") as f:
     previous_score = float(f.read())
 print("Previous score: ", previous_score)
 # running scoring.py
-current_score = subprocess.run(["python", "auto_scoring.py"], capture_output=True, text=True)
+current_score = subprocess.run(
+    ["python", "auto_scoring.py"], capture_output=True, text=True
+)
 current_score = float(current_score.stdout.strip())
 print("Current_score score: ", current_score)
 # Deciding whether to proceed, part 2
@@ -79,11 +81,3 @@ if current_score < previous_score:
 else:
     print("No model drift. Exiting...")
     sys.exit()
-
-
-
-
-
-
-
-
