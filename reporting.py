@@ -16,10 +16,11 @@ with open('config.json', 'r') as f:
     config = json.load(f)
 
 model_path = config["output_model_path"]
+confusion_matrix_plot = config["confusion_matrix_plot"]
 
 
 # Function for reporting
-def score_model():
+def model_report(filename):
     # calculate a confusion matrix using the test data and the deployed model
     # write the confusion matrix to the workspace
     predictions, y = model_predictions()
@@ -43,8 +44,8 @@ def score_model():
 
     ax.set_title("Confusion Matrix")
     plt.savefig(model_path +
-                "/" + "confusionmatrix.png")
+                "/" + filename)
 
 
 if __name__ == '__main__':
-    score_model()
+    model_report(confusion_matrix_plot)

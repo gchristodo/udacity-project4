@@ -41,18 +41,18 @@ def copy_latestscorefile():
 
 
 # function for deployment
-def store_model_into_pickle(model_name):
+def store_model_into_pickle():
     # copy the latest pickle file, the latestscore.txt value,
     # and the ingestfiles.txt file into the deployment directory
     create_output_folder(prod_deployment_path)
     destination_folder = prod_deployment_path
     source_folder = model_path
-    source_file_path = os.path.join(source_folder, model_name)
-    destination_file_path = os.path.join(destination_folder, model_name)
+    source_file_path = os.path.join(source_folder, "trainedmodel.pkl")
+    destination_file_path = os.path.join(destination_folder, "trainedmodel.pkl")
     shutil.copy(source_file_path, destination_file_path)    
     copy_ingestedfiles()
     copy_latestscorefile()
 
 
 if __name__ == "__main__":
-    store_model_into_pickle("trainedmodel.pkl")
+    store_model_into_pickle()

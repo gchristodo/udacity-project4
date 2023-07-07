@@ -16,7 +16,7 @@ with open('config.json','r') as f:
     config = json.load(f) 
 
 output_model_path = config['output_model_path']
-test_data_path = config['test_data_path']
+output_folder_path = config['output_folder_path']
 
 
 # Function for model scoring
@@ -27,7 +27,7 @@ def score_model():
     with open(os.path.join(output_model_path, modelname), 'rb') as f:
         model = pickle.load(f)
         
-    test_data = pd.read_csv(test_data_path + "/" + "testdata.csv")
+    test_data = pd.read_csv(output_folder_path + "/" + "finaldata.csv")
     X = np.array(test_data[["lastmonth_activity",
                             "lastyear_activity",
                             "number_of_employees"]]).reshape(-1, 3)
@@ -37,7 +37,6 @@ def score_model():
     print(f1)
     with open("latestscore.txt", "w") as f:
         f.write(str(f1))
-    print("latestscore.txt created successfully")
     return float(f1)
 
 

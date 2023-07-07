@@ -11,20 +11,19 @@ import pickle
 with open('config.json', 'r') as f:
     config = json.load(f)
 
-dataset_csv_path = os.path.join(config['output_folder_path'])
-test_data_path = os.path.join(config['test_data_path'])
+dataset_csv_path = config['output_folder_path']
+test_data_path = config['test_data_path']
 prod_deployment_path = config['prod_deployment_path']
 output_folder_path = config['output_folder_path']
 
 
 # Function to get model predictions
-def model_predictions(data_path):
+def model_predictions():
     # read the deployed model and a test dataset, calculate predictions
     model_pkl_file = "trainedmodel.pkl"
     with open(os.path.join(prod_deployment_path, model_pkl_file), "rb") as f:
         deployed_model = pickle.load(f)
-
-    test_data = pd.read_csv(data_path)
+    test_data = test_data = pd.read_csv(test_data_path + "/" + "testdata.csv")
     X = np.array(test_data[["lastmonth_activity",
                             "lastyear_activity",
                             "number_of_employees"]]).reshape(-1, 3)
@@ -131,8 +130,3 @@ if __name__ == '__main__':
     execution_time()
     outdated_packages_list()
 
-
-
-
-
-    

@@ -18,8 +18,16 @@ def view_folder_content(folder_path):
     entries = os.listdir(cwd + "/" + folder_path)
     my_entries = []
     for entry in entries:
-        my_entries.append(cwd + "/" + folder_path + "/" + entry)
+        if entry.split(".")[-1] == "csv":
+            my_entries.append(cwd + "/" + folder_path + "/" + entry)
     return my_entries
+
+
+def extract_csv_from_path_list(path_entries):
+    extracted_csv = []
+    for path in path_entries:
+        extracted_csv.append(path.split("/")[-1])    
+    return extracted_csv
 
 
 def create_output_folder(folder_path):
@@ -40,8 +48,7 @@ def merge_multiple_dataframe():
     for entry in file_paths:
         if entry.split(".")[-1] == "csv":
             tmp_df = pd.read_csv(entry)
-            csv_files.append(entry.split("/")[-1])
-            
+            csv_files.append(entry.split("/")[-1])            
         else:
             pass
         dataframe = dataframe.append(tmp_df)
@@ -51,7 +58,7 @@ def merge_multiple_dataframe():
     dataframe = dataframe.drop_duplicates()
     dataframe = dataframe.reset_index(drop=True)
     create_output_folder(output_folder_path)
-    dataframe.to_csv(output_folder_path + "/" + "finaldata.csv")   
+    dataframe.to_csv(output_folder_path + "/" + "finaldata.csv")
 
 
 if __name__ == '__main__':
